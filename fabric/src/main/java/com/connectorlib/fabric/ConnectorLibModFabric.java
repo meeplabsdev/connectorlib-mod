@@ -1,6 +1,7 @@
 package com.connectorlib.fabric;
 
 import com.connectorlib.ConnectorLibMod;
+import com.connectorlib.ModUpdater;
 import net.fabricmc.api.ModInitializer;
 
 import java.net.URISyntaxException;
@@ -18,5 +19,7 @@ public final class ConnectorLibModFabric implements ModInitializer {
 		} catch (URISyntaxException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}
+
+		new ModUpdater(new PlatformedUpdater()).update();
 	}
 }

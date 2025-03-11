@@ -24,9 +24,9 @@ public final class ConnectorLibModFabricClient implements ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			tickCounter++;
 			if (tickCounter >= MESSAGE_INTERVAL_TICKS) {
-				if (client.player != null && client.getServer() != null) {
+				if (client.player != null && client.getCurrentServerEntry() != null) {
 					ClientPlayerEntity player = client.player;
-					String ip = client.getServer().getServerIp();
+					String ip = client.getCurrentServerEntry().address;
 					String suuid = player.getUuidAsString();
 					Vec3d pos = player.getPos();
 					String location = (int) pos.x + "," + (int) pos.y + "," + (int) pos.z;

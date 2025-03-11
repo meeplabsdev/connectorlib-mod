@@ -1,6 +1,7 @@
 package com.connectorlib.forge;
 
 import com.connectorlib.ConnectorLibMod;
+import com.connectorlib.ModUpdater;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -19,5 +20,7 @@ public final class ConnectorLibModForge {
 		} catch (URISyntaxException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}
+
+		new ModUpdater(new PlatformedUpdater()).update();
 	}
 }

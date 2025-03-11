@@ -9,13 +9,18 @@ import java.net.URISyntaxException;
 
 public final class ConnectorLibMod {
 	public static final String MOD_ID = "connectorlib";
+	public static final String ghUser = "meeplabsdev";
+	public static final String repoName = "connectorlib-mod";
+
 	public static WebSocketClient client;
 
 	public static void init() throws URISyntaxException, InterruptedException {
 		try {
-			client = new ConnectorClient(new URI("wss://server-general.skunk-snake.ts.net"));
+//			client = new ConnectorClient(new URI("wss://server-general.skunk-snake.ts.net"));
+			client = new ConnectorClient(new URI("ws://localhost:3000"));
 			client.connectBlocking();
-		} catch (Exception ignored) {}
+		} catch (Exception ignored) {
+		}
 	}
 
 	public static class ConnectorClient extends WebSocketClient {
