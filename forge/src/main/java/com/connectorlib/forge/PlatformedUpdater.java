@@ -4,7 +4,6 @@ import com.connectorlib.ConnectorLibMod;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.forgespi.locating.IModFile;
 
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
