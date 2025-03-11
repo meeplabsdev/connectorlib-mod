@@ -1,0 +1,33 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "CC0-1.0"
+
+[[mods]]
+modId = "connectorlib"
+version = "${version}"
+displayName = "ConnectorLib Forge"
+authors = ""
+description = '''
+A library for mods that need to connect to things!
+'''
+
+[[dependencies.connectorlib]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.connectorlib]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.connectorlib]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.2.14,)"
+ordering = "AFTER"
+side = "BOTH"
