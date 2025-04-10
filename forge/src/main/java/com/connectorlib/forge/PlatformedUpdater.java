@@ -23,21 +23,21 @@ public class PlatformedUpdater extends com.connectorlib.PlatformedUpdater {
 		return "forge";
 	}
 
-	@Override
-	public Path getModFilePath() {
-		Path modsFolder = FMLPaths.MODSDIR.get();
-		String currentModFileName = ConnectorLibMod.MOD_ID + "-" + getPlatformVersion() + "-"
-			+ ModList.get().getModContainerById(ConnectorLibMod.MOD_ID).get().getModInfo().getVersion() + ".jar";
-
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(modsFolder)) {
-			for (Path entry : stream) {
-				if (Files.isRegularFile(entry) && entry.getFileName().toString().equals(currentModFileName)) {
-					return entry.toAbsolutePath();
-				}
-			}
-		} catch (Exception ignored) {
-		}
-
-		return null;
-	}
+//	@Override
+//	public Path getModFilePath() {
+//		Path modsFolder = FMLPaths.MODSDIR.get();
+//		String currentModFileName = ConnectorLibMod.MOD_ID + "-" + getPlatformVersion() + "-"
+//			+ ModList.get().getModContainerById(ConnectorLibMod.MOD_ID).get().getModInfo().getVersion() + ".jar";
+//
+//		try (DirectoryStream<Path> stream = Files.newDirectoryStream(modsFolder)) {
+//			for (Path entry : stream) {
+//				if (Files.isRegularFile(entry) && entry.getFileName().toString().equals(currentModFileName)) {
+//					return entry.toAbsolutePath();
+//				}
+//			}
+//		} catch (Exception ignored) {
+//		}
+//
+//		return null;
+//	}
 }
