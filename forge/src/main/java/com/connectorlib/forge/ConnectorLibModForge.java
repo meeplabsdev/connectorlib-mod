@@ -15,12 +15,7 @@ public final class ConnectorLibModForge {
 		EventBuses.registerModEventBus(ConnectorLibMod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
 
 		// Run our common setup.
-		try {
-			ConnectorLibMod.init();
-		} catch (URISyntaxException | InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-
+		ConnectorLibMod.init();
 		new ModUpdater(new PlatformedUpdater()).update();
 	}
 }

@@ -14,12 +14,7 @@ public final class ConnectorLibModFabric implements ModInitializer {
 		// Proceed with mild caution.
 
 		// Run our common setup.
-		try {
-			ConnectorLibMod.init();
-		} catch (URISyntaxException | InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-
+		ConnectorLibMod.init();
 		new ModUpdater(new PlatformedUpdater()).update();
 	}
 }
