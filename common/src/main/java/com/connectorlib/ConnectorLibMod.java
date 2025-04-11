@@ -52,17 +52,17 @@ public final class ConnectorLibMod {
 		});
 
 		ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> {
-			ModConnector.getInstance().send(new PlayerJoin(getIp(), player.getName().getString()));
+			ModConnector.getInstance().send(new PlayerJoin(getIp(), player.getUuidAsString()));
 		});
 
 		ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(player -> {
 			if (player != null) {
-				ModConnector.getInstance().send(new PlayerQuit(getIp(), player.getName().getString()));
+				ModConnector.getInstance().send(new PlayerQuit(getIp(), player.getUuidAsString()));
 			}
 		});
 
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
-			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getName().getString()));
+			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getUuidAsString()));
 		});
 	}
 
