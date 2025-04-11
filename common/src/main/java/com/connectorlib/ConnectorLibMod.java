@@ -41,8 +41,12 @@ public final class ConnectorLibMod {
 			}
 		});
 
-		ClientChatEvent.RECEIVED.register((type, message) -> {
-			ModConnector.getInstance().send(new ChatData(getIp(), message.getString()));
+		ClientChatEvent.RECEIVED.register((parameters, message) -> {
+			ModConnector.getInstance().send(new ChatData(
+				getIp(), message.getString(),
+				parameters.name().getString(),
+				parameters.targetName() != null ? parameters.targetName().getString() : ""
+			));
 			return CompoundEventResult.pass();
 		});
 
