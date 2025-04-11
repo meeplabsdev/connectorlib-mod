@@ -26,8 +26,9 @@
 
 package com.connectorlib.java_websocket.exceptions;
 
-import java.io.IOException;
 import com.connectorlib.java_websocket.WebSocket;
+
+import java.io.IOException;
 
 /**
  * Exception to wrap an IOException and include information about the websocket which had the
@@ -37,42 +38,42 @@ import com.connectorlib.java_websocket.WebSocket;
  */
 public class WrappedIOException extends Exception {
 
-  /**
-   * The websocket where the IOException happened
-   */
-  private final transient WebSocket connection;
+	/**
+	 * The websocket where the IOException happened
+	 */
+	private final transient WebSocket connection;
 
-  /**
-   * The IOException
-   */
-  private final IOException ioException;
+	/**
+	 * The IOException
+	 */
+	private final IOException ioException;
 
-  /**
-   * Wrapp an IOException and include the websocket
-   *
-   * @param connection  the websocket where the IOException happened
-   * @param ioException the IOException
-   */
-  public WrappedIOException(WebSocket connection, IOException ioException) {
-    this.connection = connection;
-    this.ioException = ioException;
-  }
+	/**
+	 * Wrapp an IOException and include the websocket
+	 *
+	 * @param connection  the websocket where the IOException happened
+	 * @param ioException the IOException
+	 */
+	public WrappedIOException(WebSocket connection, IOException ioException) {
+		this.connection = connection;
+		this.ioException = ioException;
+	}
 
-  /**
-   * The websocket where the IOException happened
-   *
-   * @return the websocket for the wrapped IOException
-   */
-  public WebSocket getConnection() {
-    return connection;
-  }
+	/**
+	 * The websocket where the IOException happened
+	 *
+	 * @return the websocket for the wrapped IOException
+	 */
+	public WebSocket getConnection() {
+		return connection;
+	}
 
-  /**
-   * The wrapped IOException
-   *
-   * @return IOException which is wrapped
-   */
-  public IOException getIOException() {
-    return ioException;
-  }
+	/**
+	 * The wrapped IOException
+	 *
+	 * @return IOException which is wrapped
+	 */
+	public IOException getIOException() {
+		return ioException;
+	}
 }

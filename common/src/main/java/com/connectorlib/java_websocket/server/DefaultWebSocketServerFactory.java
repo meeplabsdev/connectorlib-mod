@@ -25,33 +25,34 @@
 
 package com.connectorlib.java_websocket.server;
 
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
-import java.util.List;
 import com.connectorlib.java_websocket.WebSocketAdapter;
 import com.connectorlib.java_websocket.WebSocketImpl;
 import com.connectorlib.java_websocket.WebSocketServerFactory;
 import com.connectorlib.java_websocket.drafts.Draft;
 
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
+import java.util.List;
+
 public class DefaultWebSocketServerFactory implements WebSocketServerFactory {
 
-  @Override
-  public WebSocketImpl createWebSocket(WebSocketAdapter a, Draft d) {
-    return new WebSocketImpl(a, d);
-  }
+	@Override
+	public WebSocketImpl createWebSocket(WebSocketAdapter a, Draft d) {
+		return new WebSocketImpl(a, d);
+	}
 
-  @Override
-  public WebSocketImpl createWebSocket(WebSocketAdapter a, List<Draft> d) {
-    return new WebSocketImpl(a, d);
-  }
+	@Override
+	public WebSocketImpl createWebSocket(WebSocketAdapter a, List<Draft> d) {
+		return new WebSocketImpl(a, d);
+	}
 
-  @Override
-  public SocketChannel wrapChannel(SocketChannel channel, SelectionKey key) {
-    return channel;
-  }
+	@Override
+	public SocketChannel wrapChannel(SocketChannel channel, SelectionKey key) {
+		return channel;
+	}
 
-  @Override
-  public void close() {
-    //Nothing to do for a normal ws factory
-  }
+	@Override
+	public void close() {
+		//Nothing to do for a normal ws factory
+	}
 }
