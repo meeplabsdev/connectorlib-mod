@@ -55,7 +55,8 @@ public final class ConnectorLibMod {
 		});
 
 		ClientSystemMessageEvent.RECEIVED.register(message -> {
-			ModConnector.getInstance().send(new SystemChatData(getIp(), message.getString()));
+			String to = MinecraftClient.getInstance().getSession().getUuid();
+			ModConnector.getInstance().send(new SystemChatData(getIp(), message.getString(), to));
 			return CompoundEventResult.pass();
 		});
 
