@@ -1,10 +1,9 @@
 package com.connectorlib;
 
-import com.connectorlib.messages.IdentityRequest;
-import com.connectorlib.messages.NetworkData;
-import com.connectorlib.messages.PositionData;
-import dev.architectury.event.events.client.ClientLifecycleEvent;
-import dev.architectury.event.events.client.ClientTickEvent;
+import com.connectorlib.messages.*;
+import dev.architectury.event.CompoundEventResult;
+import dev.architectury.event.events.client.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
@@ -35,16 +34,46 @@ public final class ConnectorLibMod {
 					ClientPlayerEntity player = minecraftClient.player;
 					Vec3d pos = player.getPos();
 
-					String ip = "unknown";
-					if (minecraftClient.getCurrentServerEntry() != null) {
-						ip = minecraftClient.getCurrentServerEntry().address;
-					}
-
-					ModConnector.getInstance().send(new PositionData(ip, (int) pos.x, (int) pos.y, (int) pos.z));
+					ModConnector.getInstance().send(new PositionData(getIp(), (int) pos.x, (int) pos.y, (int) pos.z));
 				}
 
 				tickCounter.set(0);
 			}
 		});
+
+		ClientChatEvent.RECEIVED.register((type, message) -> {
+			ModConnector.getInstance().send(new ChatData(getIp(), message.getString()));
+			return CompoundEventResult.pass();
+		});
+
+		ClientSystemMessageEvent.RECEIVED.register(message -> {
+			ModConnector.getInstance().send(new SystemChatData(getIp(), message.getString()));
+			return CompoundEventResult.pass();
+		});
+
+		ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> {
+			ModConnector.getInstance().send(new PlayerJoin(getIp(), player.getName().getString()));
+		});
+
+		ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(player -> {
+			if (player != null) {
+				ModConnector.getInstance().send(new PlayerQuit(getIp(), player.getName().getString()));
+			}
+		});
+
+		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
+			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getName().getString()));
+		});
+	}
+
+	private static String getIp() {
+		MinecraftClient minecraftClient = MinecraftClient.getInstance();
+
+		String ip = "unknown";
+		if (minecraftClient.getCurrentServerEntry() != null) {
+			ip = minecraftClient.getCurrentServerEntry().address;
+		}
+
+		return ip;
 	}
 }
