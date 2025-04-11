@@ -6,8 +6,6 @@ import dev.architectury.platform.forge.EventBuses;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import java.net.URISyntaxException;
-
 @Mod(ConnectorLibMod.MOD_ID)
 public final class ConnectorLibModForge {
 	public ConnectorLibModForge() {

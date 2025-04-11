@@ -87,6 +87,15 @@ public class ModConnector {
 		}
 
 		@Override
+		public void onError(Exception ex) {
+			ex.printStackTrace();
+		}
+
+		@Override
+		public void onClose(int code, String reason, boolean remote) {
+		}
+
+		@Override
 		public void onOpen(ServerHandshake handshakedata) {
 		}
 
@@ -118,15 +127,6 @@ public class ModConnector {
 					e.printStackTrace();
 				}
 			}
-		}
-
-		@Override
-		public void onClose(int code, String reason, boolean remote) {
-		}
-
-		@Override
-		public void onError(Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 }

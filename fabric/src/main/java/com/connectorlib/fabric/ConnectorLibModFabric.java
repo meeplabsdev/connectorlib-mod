@@ -4,8 +4,6 @@ import com.connectorlib.ConnectorLibMod;
 import com.connectorlib.ModUpdater;
 import net.fabricmc.api.ModInitializer;
 
-import java.net.URISyntaxException;
-
 public final class ConnectorLibModFabric implements ModInitializer {
 	@Override
 	public void onInitialize() {
