@@ -3,6 +3,7 @@ package com.connectorlib;
 import com.connectorlib.messages.*;
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.*;
+import dev.architectury.event.events.common.PlayerEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Vec3d;
@@ -70,6 +71,14 @@ public final class ConnectorLibMod {
 
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
 			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getUuidAsString()));
+		});
+
+		PlayerEvent.PLAYER_ADVANCEMENT.register((player, advancement) -> {
+			ModConnector.getInstance().send(new PlayerAdvancement(
+				player.server.getServerIp(),
+				player.getUuidAsString(),
+				advancement.getId().toString()
+			));
 		});
 	}
 
