@@ -5,13 +5,13 @@ import com.connectorlib.BaseMessage;
 public class ChatData extends BaseMessage {
 	String ip;
 	String message;
-	String from;
-	String to;
+	String sender;
+	String recipient;
 
-	public ChatData(String ip, String message, String from, String to) {
+	public ChatData(String ip, String message, String sender, String recipient) {
 		this.ip = ip;
 		this.message = message;
-		this.from = from;
-		this.to = to;
+		this.sender = sender;
+		this.recipient = recipient;
 	}
 }
