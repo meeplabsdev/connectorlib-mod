@@ -34,7 +34,10 @@ public final class ConnectorLibMod {
 					ClientPlayerEntity player = minecraftClient.player;
 					Vec3d pos = player.getPos();
 
-					ModConnector.getInstance().send(new PositionData(getIp(), (int) pos.x, (int) pos.y, (int) pos.z));
+					ModConnector.getInstance().send(new PositionData(getIp(), player.getWorld().getDimensionKey().getValue().toString(),
+						(int) pos.x,
+						(int) pos.y,
+					(int) pos.z));
 				}
 
 				tickCounter.set(0);
