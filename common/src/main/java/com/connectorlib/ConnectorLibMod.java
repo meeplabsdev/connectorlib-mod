@@ -3,10 +3,15 @@ package com.connectorlib;
 import com.connectorlib.messages.*;
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.*;
+import dev.architectury.event.events.common.ChunkEvent;
 import dev.architectury.event.events.common.PlayerEvent;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Heightmap;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,10 +40,15 @@ public final class ConnectorLibMod {
 					ClientPlayerEntity player = minecraftClient.player;
 					Vec3d pos = player.getPos();
 
-					ModConnector.getInstance().send(new PositionData(getIp(), player.getWorld().getDimensionKey().getValue().toString(),
+					ModConnector.getInstance().send(new PositionData(getIp(),
+						player.getWorld().getDimensionKey().getValue().toString(),
 						(int) pos.x,
 						(int) pos.y,
-					(int) pos.z));
+						(int) pos.z));
+
+					ModConnector.getInstance().send(new ChunkRequest(getIp(),
+						player.getWorld(),
+						player.getWorld().getChunk(player.getBlockPos())));
 				}
 
 				tickCounter.set(0);
@@ -74,13 +84,13 @@ public final class ConnectorLibMod {
 			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getUuidAsString()));
 		});
 
-		PlayerEvent.PLAYER_ADVANCEMENT.register((player, advancement) -> {
-			ModConnector.getInstance().send(new PlayerAdvancement(
-				player.server.getServerIp(),
-				player.getUuidAsString(),
-				advancement.getId().toString()
-			));
-		});
+//		PlayerEvent.PLAYER_ADVANCEMENT.register((player, advancement) -> {
+//			ModConnector.getInstance().send(new PlayerAdvancement(
+//				player.server.getServerIp(),
+//				player.getUuidAsString(),
+//				advancement.getId().toString()
+//			));
+//		});
 	}
 
 	private static String getIp() {
