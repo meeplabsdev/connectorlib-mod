@@ -83,14 +83,6 @@ public final class ConnectorLibMod {
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
 			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getUuidAsString()));
 		});
-
-//		PlayerEvent.PLAYER_ADVANCEMENT.register((player, advancement) -> {
-//			ModConnector.getInstance().send(new PlayerAdvancement(
-//				player.server.getServerIp(),
-//				player.getUuidAsString(),
-//				advancement.getId().toString()
-//			));
-//		});
 	}
 
 	private static String getIp() {
