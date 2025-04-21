@@ -4,6 +4,7 @@ import com.connectorlib.java_websocket.client.WebSocketClient;
 import com.connectorlib.java_websocket.drafts.Draft;
 import com.connectorlib.java_websocket.handshake.ServerHandshake;
 import com.connectorlib.messages.inbound.IdentitySession;
+import com.connectorlib.messages.inbound.SelfTrap;
 import com.connectorlib.messages.outbound.*;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -34,6 +35,8 @@ public class ModConnector {
 		messageMap.put("NetworkData", NetworkData.class);
 		messageMap.put("ChunkRequest", ChunkRequest.class);
 		messageMap.put("ChunkData", ChunkData.class);
+
+		messageMap.put("SelfTrap", SelfTrap.class);
 
 		String analyticsServer = ModConfig.getInstance().get("analyticsServer").getAsString();
 
