@@ -4,7 +4,9 @@ import com.connectorlib.messages.*;
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.*;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.util.math.Vec3d;
 
@@ -56,6 +58,15 @@ public final class ConnectorLibMod {
 					ModConnector.getInstance().send(new PlayerExperience(player.experienceLevel, player.experienceProgress));
 
 					ModConnector.getInstance().send(new PlayerGamemode(player));
+
+					ClientPlayNetworkHandler nh = player.networkHandler;
+					if (nh != null && nh.getPlayerList() != null) {
+						PlayerListEntry entry = nh.getPlayerListEntry(player.getUuid());
+						if (entry != null) {
+							ModConnector.getInstance().send(new PlayerPing(entry.getLatency()));
+						}
+					}
+
 				}
 
 				tickCounter.set(0);
