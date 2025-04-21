@@ -50,6 +50,8 @@ public final class ConnectorLibMod {
 						hm.getFoodLevel(),
 						(int) hm.getSaturationLevel(),
 						(int) hm.getExhaustion()));
+
+					ModConnector.getInstance().send(new PlayerBreath(player.getAir()));
 				}
 
 				tickCounter.set(0);
