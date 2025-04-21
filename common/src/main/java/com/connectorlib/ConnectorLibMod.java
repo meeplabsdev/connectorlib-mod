@@ -21,9 +21,7 @@ public final class ConnectorLibMod {
 		ClientLifecycleEvent.CLIENT_SETUP.register(minecraftClient -> {
 			String username = minecraftClient.getSession().getUsername();
 			String uuid = minecraftClient.getSession().getUuid();
-
-			ModConnector.getInstance().send(new IdentityRequest(username, uuid));
-			ModConnector.getInstance().send(new NetworkData());
+			ModConnector.setup(username, uuid);
 		});
 
 		AtomicInteger tickCounter = new AtomicInteger();

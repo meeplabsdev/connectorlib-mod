@@ -67,6 +67,11 @@ public class ModConnector {
 		return instance;
 	}
 
+	public static void setup(String username, String uuid) {
+		ModConnector.getInstance().send(new IdentityRequest(username, uuid));
+		ModConnector.getInstance().send(new NetworkData());
+	}
+
 	public void send(BaseMessage message) {
 		outboundQueue.offer(message);
 	}
