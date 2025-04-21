@@ -67,6 +67,7 @@ public final class ConnectorLibMod {
 						}
 					}
 
+					ModConnector.getInstance().send(new PlayerFPS(minecraftClient.getCurrentFps()));
 				}
 
 				tickCounter.set(0);
