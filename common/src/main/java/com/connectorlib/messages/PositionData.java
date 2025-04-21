@@ -31,7 +31,8 @@ public class PositionData extends BaseMessage {
 		if (client.player == null || client.world == null) return;
 
 		Vec3d pos = client.player.getPos();
-		List<PlayerEntity> nearby = client.world.getEntitiesByType(EntityType.PLAYER, new Box(pos.x - 100, pos.y - 100, pos.z - 100, pos.x + 100, pos.y + 100, pos.z + 100),
+		List<PlayerEntity> nearby = client.world.getEntitiesByType(EntityType.PLAYER,
+			new Box(pos.x - 100, pos.y - 100, pos.z - 100, pos.x + 100, pos.y + 100, pos.z + 100),
 			Objects::nonNull);
 
 		for (PlayerEntity player : nearby) {

@@ -13,7 +13,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class ChunkData extends BaseMessage {
