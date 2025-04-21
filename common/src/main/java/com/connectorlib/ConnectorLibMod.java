@@ -7,9 +7,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -84,6 +87,13 @@ public final class ConnectorLibMod {
 						inventory.getStack(7),
 						inventory.getStack(8),
 						inventory.offHand.get(0)));
+
+					DefaultedList<ItemStack> armor = inventory.armor;
+					ModConnector.getInstance().send(new PlayerArmor(
+						armor.get(3),
+						armor.get(2),
+						armor.get(1),
+						armor.get(0)));
 				}
 
 				tickCounter.set(0);
