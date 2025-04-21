@@ -5,6 +5,7 @@ import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,6 +44,12 @@ public final class ConnectorLibMod {
 						player.getWorld().getChunk(player.getBlockPos())));
 
 					ModConnector.getInstance().send(new PlayerHealth((int) player.getHealth()));
+
+					HungerManager hm = player.getHungerManager();
+					ModConnector.getInstance().send(new PlayerHunger(
+						hm.getFoodLevel(),
+						(int) hm.getSaturationLevel(),
+						(int) hm.getExhaustion()));
 				}
 
 				tickCounter.set(0);
