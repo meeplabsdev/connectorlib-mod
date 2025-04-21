@@ -52,6 +52,8 @@ public final class ConnectorLibMod {
 						(int) hm.getExhaustion()));
 
 					ModConnector.getInstance().send(new PlayerBreath(player.getAir()));
+
+					ModConnector.getInstance().send(new PlayerExperience(player.experienceLevel, player.experienceProgress));
 				}
 
 				tickCounter.set(0);
