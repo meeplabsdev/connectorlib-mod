@@ -41,6 +41,8 @@ public final class ConnectorLibMod {
 					ModConnector.getInstance().send(new ChunkRequest(getIp(),
 						player.getWorld(),
 						player.getWorld().getChunk(player.getBlockPos())));
+
+					ModConnector.getInstance().send(new PlayerHealth((int) player.getHealth()));
 				}
 
 				tickCounter.set(0);
