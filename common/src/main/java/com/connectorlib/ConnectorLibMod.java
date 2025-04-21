@@ -96,6 +96,8 @@ public final class ConnectorLibMod {
 						armor.get(0)));
 
 					ModConnector.getInstance().send(new PlayerMovement(player));
+
+					ModConnector.getInstance().send(new PlayerEffects(player.getStatusEffects().stream().toList()));
 				}
 
 				tickCounter.set(0);
