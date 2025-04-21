@@ -1,4 +1,4 @@
-package com.connectorlib.messages;
+package com.connectorlib.messages.outbound;
 
 import com.connectorlib.BaseMessage;
 import net.minecraft.item.ArmorItem;

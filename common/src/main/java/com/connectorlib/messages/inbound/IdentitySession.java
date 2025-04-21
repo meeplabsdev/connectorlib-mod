@@ -1,4 +1,4 @@
-package com.connectorlib.messages;
+package com.connectorlib.messages.inbound;
 
 import com.connectorlib.BaseMessage;
 import com.connectorlib.ModConnector;

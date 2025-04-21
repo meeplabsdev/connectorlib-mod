@@ -1,16 +1,14 @@
 package com.connectorlib;
 
-import com.connectorlib.messages.*;
+import com.connectorlib.messages.outbound.*;
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
