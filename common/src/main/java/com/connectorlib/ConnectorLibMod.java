@@ -8,6 +8,8 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.HungerManager;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,6 +70,20 @@ public final class ConnectorLibMod {
 					}
 
 					ModConnector.getInstance().send(new PlayerFPS(minecraftClient.getCurrentFps()));
+
+					PlayerInventory inventory = player.getInventory();
+					ModConnector.getInstance().send(new PlayerHotbar(
+						inventory.selectedSlot,
+						inventory.getStack(0),
+						inventory.getStack(1),
+						inventory.getStack(2),
+						inventory.getStack(3),
+						inventory.getStack(4),
+						inventory.getStack(5),
+						inventory.getStack(6),
+						inventory.getStack(7),
+						inventory.getStack(8),
+						inventory.offHand.get(0)));
 				}
 
 				tickCounter.set(0);
