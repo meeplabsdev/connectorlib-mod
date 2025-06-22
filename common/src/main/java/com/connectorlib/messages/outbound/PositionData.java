@@ -7,10 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class PositionData extends BaseMessage {
 	String ip;
@@ -18,7 +15,7 @@ public class PositionData extends BaseMessage {
 	Integer x;
 	Integer y;
 	Integer z;
-	ArrayList<Map<String, Integer>> nearbyPlayers = new ArrayList<>();
+	HashMap<String, Integer> nearbyPlayers = new HashMap<>();
 
 	public PositionData(String ip, String dimension, Integer x, Integer y, Integer z) {
 		this.ip = ip;
@@ -36,7 +33,7 @@ public class PositionData extends BaseMessage {
 			Objects::nonNull);
 
 		for (PlayerEntity player : nearby) {
-			nearbyPlayers.add(Map.of(player.getName().getString(), (int) client.player.distanceTo(player)));
+			nearbyPlayers.put(player.getName().getString(), (int) client.player.distanceTo(player));
 		}
 	}
 }
