@@ -6,57 +6,22 @@ import net.minecraft.item.ItemStack;
 
 public class PlayerArmor extends BaseMessage {
 	Integer protectionLevel;
-	String helmetName;
-	String helmetNbt;
-	String chestplateName;
-	String chestplateNbt;
-	String leggingsName;
-	String leggingsNbt;
-	String bootsName;
-	String bootsNbt;
+	String[] itemNames = new String[4];
+	String[] itemNbt = new String[4];
 
 	public PlayerArmor(ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots) {
+		ItemStack[] items = {helmet, chestplate, leggings, boots};
 		this.protectionLevel = 0;
 
-		if (helmet.getItem() instanceof ArmorItem helmetArmor) {
-			this.protectionLevel += helmetArmor.getProtection();
-		}
+		for (int i = 0; i < items.length; i++) {
+			ItemStack item = items[i];
 
-		if (chestplate.getItem() instanceof ArmorItem chestplateArmor) {
-			this.protectionLevel += chestplateArmor.getProtection();
-		}
+			if (item.getItem() instanceof ArmorItem armor) {
+				this.protectionLevel += armor.getProtection();
+			}
 
-		if (leggings.getItem() instanceof ArmorItem leggingsArmor) {
-			this.protectionLevel += leggingsArmor.getProtection();
-		}
-
-		if (boots.getItem() instanceof ArmorItem bootsArmor) {
-			this.protectionLevel += bootsArmor.getProtection();
-		}
-
-		this.helmetName = helmet.getName().getString();
-		this.chestplateName = chestplate.getName().getString();
-		this.leggingsName = leggings.getName().getString();
-		this.bootsName = boots.getName().getString();
-
-		if (helmet.hasNbt()) {
-			assert helmet.getNbt() != null;
-			this.helmetNbt = helmet.getNbt().toString();
-		}
-
-		if (chestplate.hasNbt()) {
-			assert chestplate.getNbt() != null;
-			this.chestplateNbt = chestplate.getNbt().toString();
-		}
-
-		if (leggings.hasNbt()) {
-			assert leggings.getNbt() != null;
-			this.leggingsNbt = leggings.getNbt().toString();
-		}
-
-		if (boots.hasNbt()) {
-			assert boots.getNbt() != null;
-			this.bootsNbt = boots.getNbt().toString();
+			itemNames[i] = item.getName() != null ? item.getName().getString() : "";
+			itemNbt[i] = (item.hasNbt() && item.getNbt() != null) ? item.getNbt().toString() : "";
 		}
 	}
 }

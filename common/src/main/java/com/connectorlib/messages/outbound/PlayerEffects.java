@@ -3,18 +3,17 @@ package com.connectorlib.messages.outbound;
 import com.connectorlib.BaseMessage;
 import net.minecraft.entity.effect.StatusEffectInstance;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlayerEffects extends BaseMessage {
-	List<String> effects;
-	List<Integer> durations;
+	HashMap<String, Integer> effects;
 
 	public PlayerEffects(List<StatusEffectInstance> effects) {
-		this.effects = new ArrayList<>(effects.size());
+		this.effects = new HashMap<>(effects.size());
+
 		for (StatusEffectInstance effect : effects) {
-			this.effects.add(effect.getEffectType().getName().getString());
-			this.durations.add(effect.getDuration());
+			this.effects.put(effect.getEffectType().getName().getString(), effect.getDuration());
 		}
 	}
 }
