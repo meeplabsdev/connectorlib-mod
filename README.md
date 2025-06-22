@@ -2,3 +2,4 @@
 The fabric/forge mod code for connectorlib.
 
 # todo
+player hardware data
