@@ -106,7 +106,7 @@ public final class ConnectorLibMod {
 			ModConnector.getInstance().send(new ChatData(
 				getIp(), message.getString(),
 				parameters.name().getString(),
-				parameters.targetName() != null ? parameters.targetName().getString() : ""
+				parameters.targetName() != null ? parameters.targetName().getString() : "you"
 			));
 			return CompoundEventResult.pass();
 		});
