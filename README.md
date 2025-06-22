@@ -1,5 +1,1 @@
-# connectorlib-mod
-The fabric/forge mod code for connectorlib.
-
-# todo
-player hardware data
+The fabric/forge mod code for connectorlib. For more information or the documentation, visit [github.com/meeplabsdev/connectorlib](https://github.com/meeplabsdev/connectorlib).
