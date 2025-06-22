@@ -72,6 +72,8 @@ public class ModConnector {
 	}
 
 	public static void setup(String username, String uuid) {
+		sessionId = null;
+		ModConnector.instance = null;
 		ModConnector.getInstance().send(new IdentityRequest(username, uuid));
 		ModConnector.getInstance().send(new NetworkData());
 	}
