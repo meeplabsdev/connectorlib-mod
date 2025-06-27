@@ -12,11 +12,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
+import dev.architectury.platform.Platform;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -50,16 +53,30 @@ public class ModConnector {
 		ClientLifecycleEvent.CLIENT_STOPPING.register(minecraftClient -> client.close());
 	}
 
+	private static Instant lastConnect;
 	private void tick() {
-		BaseMessage outboundMessage = outboundQueue.peek();
-		if (outboundMessage != null) {
-			if (sessionId == null && outboundMessage.authRequired) {
-				outboundQueue.add(outboundQueue.poll()); // Back of the line bucko
-			} else {
-				outboundQueue.remove();
-				outboundMessage.session = sessionId;
-				client.send(outboundMessage.jsonify());
+		if (client != null && client.isOpen()) {
+			lastConnect = Instant.now();
+			BaseMessage outboundMessage = outboundQueue.peek();
+
+			if (outboundMessage != null) {
+				if (sessionId == null && outboundMessage.authRequired) {
+					outboundQueue.add(outboundQueue.poll()); // Back of the line bucko
+				} else {
+					outboundQueue.remove();
+					outboundMessage.session = sessionId;
+					client.send(outboundMessage.jsonify());
+				}
 			}
+		} else if(lastConnect.plusSeconds(15).isBefore(Instant.now())) {
+			lastConnect = Instant.now();
+			outboundQueue.clear();
+
+			try {
+				String analyticsServer = ModConfig.getInstance().get("analyticsServer").getAsString();
+				client = new ConnectorClient(new URI(analyticsServer));
+				client.connectBlocking();
+			} catch(URISyntaxException | InterruptedException ignored) {}
 		}
 	}
 
@@ -98,7 +115,7 @@ public class ModConnector {
 
 		@Override
 		public void onError(Exception ex) {
-			ex.printStackTrace();
+			if (Platform.isDevelopmentEnvironment()) ex.printStackTrace();
 		}
 
 		@Override
@@ -134,7 +151,7 @@ public class ModConnector {
 					BaseMessage instance = (BaseMessage) constructor.newInstance(args);
 					outboundQueue.add(instance);
 				} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-					e.printStackTrace();
+					if (Platform.isDevelopmentEnvironment()) e.printStackTrace();
 				}
 			}
 		}
