@@ -20,8 +20,7 @@ import java.lang.reflect.Parameter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ModConnector {
@@ -57,13 +56,29 @@ public class ModConnector {
 	private void tick() {
 		if (client != null && client.isOpen()) {
 			lastConnect = Instant.now();
-			BaseMessage outboundMessage = outboundQueue.peek();
 
+			if (outboundQueue.size() > 1) {
+				List<BaseMessage> messageList = new ArrayList<>();
+				for (int i = 0; i < outboundQueue.size(); i++) {
+					BaseMessage message = outboundQueue.peek();
+					if (message.authRequired && !message.id.equals("BulkMessage")) {
+						messageList.add(message);
+						outboundQueue.remove();
+					}
+				}
+
+				if (messageList.size() > 1) {
+					outboundQueue.add(new BulkMessage(messageList));
+				} else if (!messageList.isEmpty()) {
+					outboundQueue.add(messageList.get(0));
+				}
+			}
+
+			BaseMessage outboundMessage = outboundQueue.poll();
 			if (outboundMessage != null) {
 				if (sessionId == null && outboundMessage.authRequired) {
-					outboundQueue.add(outboundQueue.poll()); // Back of the line bucko
+					outboundQueue.add(outboundMessage); // Back of the line bucko
 				} else {
-					outboundQueue.remove();
 					outboundMessage.session = sessionId;
 					client.send(outboundMessage.jsonify());
 				}
