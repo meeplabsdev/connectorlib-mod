@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -74,19 +76,15 @@ public final class ConnectorLibMod {
 
 					ModConnector.getInstance().send(new PlayerFPS(minecraftClient.getCurrentFps()));
 
+					ItemStack[] itemStacks = new ItemStack[10];
 					PlayerInventory inventory = player.getInventory();
+					for (int i = 0; i < 9; i++) itemStacks[i] = inventory.getStack(i);
+					itemStacks[9] = inventory.offHand.get(0);
+
 					ModConnector.getInstance().send(new PlayerHotbar(
 						inventory.selectedSlot,
-						inventory.getStack(0),
-						inventory.getStack(1),
-						inventory.getStack(2),
-						inventory.getStack(3),
-						inventory.getStack(4),
-						inventory.getStack(5),
-						inventory.getStack(6),
-						inventory.getStack(7),
-						inventory.getStack(8),
-						inventory.offHand.get(0)));
+						itemStacks
+						));
 
 					DefaultedList<ItemStack> armor = inventory.armor;
 					ModConnector.getInstance().send(new PlayerArmor(
