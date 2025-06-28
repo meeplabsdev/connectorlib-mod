@@ -12,24 +12,21 @@ import java.util.*;
 public class PositionData extends BaseMessage {
 	String ip;
 	String dimension;
-	Integer x;
-	Integer y;
-	Integer z;
+	List<Integer> pos = new ArrayList<>(3);
 	HashMap<String, Integer> nearbyPlayers = new HashMap<>();
 
 	public PositionData(String ip, String dimension, Integer x, Integer y, Integer z) {
 		this.ip = ip;
 		this.dimension = dimension;
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.pos.add(x);
+		this.pos.add(y);
+		this.pos.add(z);
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client.player == null || client.world == null) return;
 
-		Vec3d pos = client.player.getPos();
 		List<PlayerEntity> nearby = client.world.getEntitiesByType(EntityType.PLAYER,
-			new Box(pos.x - 100, pos.y - 100, pos.z - 100, pos.x + 100, pos.y + 100, pos.z + 100),
+			new Box(x - 100, y - 100, z - 100, x + 100, y + 100, z + 100),
 			Objects::nonNull);
 
 		for (PlayerEntity player : nearby) {
