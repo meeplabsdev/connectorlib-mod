@@ -13,7 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class ConnectorLibMod {
 	public static final String MOD_ID = "connectorlib";
@@ -103,17 +105,40 @@ public final class ConnectorLibMod {
 		});
 
 		ClientChatEvent.RECEIVED.register((parameters, message) -> {
+			String senderName = parameters.name().getString();
+			AtomicReference<UUID> senderUuid = new AtomicReference<>(new UUID(0, 0));
+
+			MinecraftClient client = MinecraftClient.getInstance();
+			assert client.player != null;
+			assert client.world != null;
+
+			client.world.getPlayers().forEach(player -> {
+				if (player.getName().getString().equals(senderName)) {
+					senderUuid.set(player.getUuid());
+				}
+			});
+
 			ModConnector.getInstance().send(new ChatData(
-				getIp(), message.getString(),
-				parameters.name().getString(),
-				parameters.targetName() != null ? parameters.targetName().getString() : "you"
+				getIp(),
+				message.getString(),
+				senderName,
+				senderUuid.get().toString(),
+				client.player.getName().getString(),
+				client.player.getUuid().toString()
 			));
 			return CompoundEventResult.pass();
 		});
 
 		ClientSystemMessageEvent.RECEIVED.register(message -> {
-			String to = MinecraftClient.getInstance().getSession().getUuid();
-			ModConnector.getInstance().send(new SystemChatData(getIp(), message.getString(), to));
+			MinecraftClient client = MinecraftClient.getInstance();
+			assert client.player != null;
+
+			ModConnector.getInstance().send(new SystemChatData(
+				getIp(),
+				message.getString(),
+				client.player.getName().getString(),
+				client.player.getUuid().toString()
+			));
 			return CompoundEventResult.pass();
 		});
 
