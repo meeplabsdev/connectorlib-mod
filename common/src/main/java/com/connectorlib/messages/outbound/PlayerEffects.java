@@ -13,7 +13,7 @@ public class PlayerEffects extends BaseMessage {
 		this.effects = new HashMap<>(effects.size());
 
 		for (StatusEffectInstance effect : effects) {
-			this.effects.put(effect.getEffectType().getName().getString(), effect.getDuration());
+			this.effects.put(effect.getEffectType().getTranslationKey(), effect.getDuration());
 		}
 	}
 }
