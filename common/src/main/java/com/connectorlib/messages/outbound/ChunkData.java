@@ -47,13 +47,13 @@ public class ChunkData extends BaseMessage {
 				int y = chunk.getHeightmap(Heightmap.Type.WORLD_SURFACE).get(x, z);
 				BlockPos bPos = cPos.getBlockPos(x, y - 1, z);
 				BlockState bState = world.getBlockState(bPos);
-				this.blockKeys.add(bState.getBlock().getTranslationKey().replace("block.minecraft.", ""));
+				this.blockKeys.add(bState.getBlock().getTranslationKey());
 			}
 		}
 
 		Optional<RegistryKey<Biome>> bk = world.getBiome(cPos.getBlockPos(0, this.height, 0)).getKey();
 		if (bk.isPresent()) {
-			this.biomeKey = bk.get().getValue().toTranslationKey().replace("minecraft.", "");
+			this.biomeKey = bk.get().getValue().toTranslationKey();
 		} else {
 			biomeKey = "";
 		}
