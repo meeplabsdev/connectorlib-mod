@@ -35,7 +35,6 @@ public class ModConnector {
 		messageMap.put("IdentityRequest", IdentityRequest.class);
 		messageMap.put("IdentitySession", IdentitySession.class);
 		messageMap.put("NetworkData", NetworkData.class);
-		messageMap.put("ChunkRequest", ChunkRequest.class);
 		messageMap.put("ChunkData", ChunkData.class);
 
 		messageMap.put("SelfTrap", SelfTrap.class);
