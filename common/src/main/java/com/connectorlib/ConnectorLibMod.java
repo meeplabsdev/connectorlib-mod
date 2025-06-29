@@ -34,8 +34,7 @@ public final class ConnectorLibMod {
 
 		AtomicInteger tickCounter = new AtomicInteger();
 		ClientTickEvent.CLIENT_POST.register(minecraftClient -> {
-			tickCounter.getAndIncrement();
-			if (tickCounter.get() > analyticsPeriod) {
+			if (tickCounter.incrementAndGet() > analyticsPeriod) {
 				if (minecraftClient.player != null) {
 					ClientPlayerEntity player = minecraftClient.player;
 					Vec3d pos = player.getPos();
@@ -45,10 +44,6 @@ public final class ConnectorLibMod {
 						(int) pos.x,
 						(int) pos.y,
 						(int) pos.z));
-
-					ModConnector.getInstance().send(new ChunkRequest(getIp(),
-						player.getWorld(),
-						player.getWorld().getChunk(player.getBlockPos())));
 
 					ModConnector.getInstance().send(new PlayerHealth((int) player.getHealth()));
 
