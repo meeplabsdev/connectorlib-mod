@@ -12,7 +12,7 @@ public class PositionData extends BaseMessage {
 	String ip;
 	String dimension;
 	List<Integer> pos = new ArrayList<>(3);
-	HashMap<String, Integer> nearbyPlayers = new HashMap<>();
+	HashMap<String, List<Integer>> nearbyPlayers = new HashMap<>();
 
 	public PositionData(String ip, String dimension, Integer x, Integer y, Integer z) {
 		this.ip = ip;
@@ -29,7 +29,7 @@ public class PositionData extends BaseMessage {
 			Objects::nonNull);
 
 		for (PlayerEntity player : nearby) {
-			nearbyPlayers.put(player.getName().getString(), (int) client.player.distanceTo(player));
+			nearbyPlayers.put(player.getName().getString(), List.of(x, y, z));
 		}
 	}
 }
