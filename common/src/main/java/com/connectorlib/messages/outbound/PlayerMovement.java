@@ -11,8 +11,8 @@ public class PlayerMovement extends BaseMessage {
 	Boolean sprinting;
 	Boolean swimming;
 	Boolean crawling;
-	Boolean flying;
 	Boolean onGround;
+	Boolean fallFlying;
 	List<Double> velocity = new ArrayList<>(3);
 
 	public PlayerMovement(ClientPlayerEntity player) {
@@ -20,8 +20,8 @@ public class PlayerMovement extends BaseMessage {
 		this.sprinting = player.isSprinting();
 		this.swimming = player.isSwimming();
 		this.crawling = player.isCrawling();
-		this.flying = player.isFallFlying();
 		this.onGround = player.isOnGround();
+		this.fallFlying = player.isFallFlying();
 		this.velocity.add(player.getVelocity().x);
 		this.velocity.add(player.getVelocity().y);
 		this.velocity.add(player.getVelocity().z);
