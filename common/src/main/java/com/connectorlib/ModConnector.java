@@ -51,7 +51,7 @@ public class ModConnector {
 		ClientLifecycleEvent.CLIENT_STOPPING.register(minecraftClient -> client.close());
 	}
 
-	private static Instant lastConnect;
+	private static Instant lastConnect = Instant.now();
 	private void tick() {
 		if (client != null && client.isOpen()) {
 			lastConnect = Instant.now();
