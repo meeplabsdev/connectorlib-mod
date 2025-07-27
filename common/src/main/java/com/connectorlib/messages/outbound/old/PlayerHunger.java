@@ -1,8 +1,8 @@
-package com.connectorlib.messages.outbound;
+package com.connectorlib.messages.outbound.old;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 
-public class PlayerHunger extends BaseMessage {
+public class PlayerHunger extends BaseOutboundMessage {
 	Integer hunger;
 	Integer saturation;
 	Integer exhaustion;

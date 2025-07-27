@@ -1,10 +1,10 @@
-package com.connectorlib.messages.outbound;
+package com.connectorlib.messages.outbound.old;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 
 import java.util.HashMap;
 
-public class ChatData extends BaseMessage {
+public class ChatData extends BaseOutboundMessage {
 	String ip;
 	String message;
 	HashMap<String, String> sender = new HashMap<>(1);

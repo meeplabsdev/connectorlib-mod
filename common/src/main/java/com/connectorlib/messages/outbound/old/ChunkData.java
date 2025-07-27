@@ -1,6 +1,6 @@
-package com.connectorlib.messages.outbound;
+package com.connectorlib.messages.outbound.old;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.registry.RegistryKey;
@@ -11,7 +11,7 @@ import net.minecraft.world.chunk.Chunk;
 
 import java.util.Optional;
 
-public class ChunkData extends BaseMessage {
+public class ChunkData extends BaseOutboundMessage {
 	String ip;
 	Integer cx;
 	Integer cz;

@@ -1,12 +1,12 @@
-package com.connectorlib.messages.outbound;
+package com.connectorlib.messages.outbound.old;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 import net.minecraft.client.network.ClientPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerMovement extends BaseMessage {
+public class PlayerMovement extends BaseOutboundMessage {
 	Boolean sneaking;
 	Boolean sprinting;
 	Boolean swimming;

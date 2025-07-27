@@ -1,9 +1,9 @@
-package com.connectorlib.messages.outbound;
+package com.connectorlib.messages.outbound.old;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 import net.minecraft.client.network.ClientPlayerEntity;
 
-public class PlayerGamemode extends BaseMessage {
+public class PlayerGamemode extends BaseOutboundMessage {
 	String gamemode;
 
 	public PlayerGamemode(ClientPlayerEntity player) {

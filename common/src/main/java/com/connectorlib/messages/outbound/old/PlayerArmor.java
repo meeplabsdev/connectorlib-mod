@@ -1,12 +1,12 @@
-package com.connectorlib.messages.outbound;
+package com.connectorlib.messages.outbound.old;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
 
-public class PlayerArmor extends BaseMessage {
+public class PlayerArmor extends BaseOutboundMessage {
 	Integer protectionLevel;
 	HashMap<String, String> slots = new HashMap<>(4);
 

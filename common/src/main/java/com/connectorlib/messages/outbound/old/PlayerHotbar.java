@@ -1,11 +1,11 @@
-package com.connectorlib.messages.outbound;
+package com.connectorlib.messages.outbound.old;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
 
-public class PlayerHotbar extends BaseMessage {
+public class PlayerHotbar extends BaseOutboundMessage {
 	Integer selectedSlot;
 	HashMap<String, String> slots = new HashMap<>(10);
 
