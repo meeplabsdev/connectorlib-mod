@@ -1,14 +1,11 @@
 package com.connectorlib.messages.outbound;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 
-public class IdentityRequest extends BaseMessage {
-	String username;
-	String uuid;
+public class IdentityRequest extends BaseOutboundMessage {
+	public String uuid;
 
-	public IdentityRequest(String username, String uuid) {
-		this.authRequired = false;
-		this.username = username;
+	public IdentityRequest(String uuid) {
 		this.uuid = uuid;
 	}
 }
