@@ -3,94 +3,96 @@ package com.connectorlib;
 import com.connectorlib.java_websocket.client.WebSocketClient;
 import com.connectorlib.java_websocket.drafts.Draft;
 import com.connectorlib.java_websocket.handshake.ServerHandshake;
-import com.connectorlib.messages.inbound.IdentitySession;
-import com.connectorlib.messages.inbound.SelfTrap;
-import com.connectorlib.messages.outbound.*;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.connectorlib.messages.outbound.IdentityChallenge;
+import com.connectorlib.messages.outbound.IdentityRequest;
+import com.connectorlib.messages.outbound.NetworkData;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.platform.Platform;
+import net.minecraft.client.MinecraftClient;
+import org.msgpack.jackson.dataformat.MessagePackMapper;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Parameter;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.*;
+import java.nio.ByteBuffer;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ModConnector {
-	private static final Queue<BaseMessage> outboundQueue = new ConcurrentLinkedQueue<>();
-	private static final HashMap<String, Class<? extends BaseMessage>> messageMap = new HashMap<>();
+	private static final Queue<BaseOutboundMessage> outboundQueue = new ConcurrentLinkedQueue<>();
+	private static ConnectorClient client;
 	private static ModConnector instance;
-	private static WebSocketClient client;
-	private static String sessionId;
 
 	private ModConnector() {
-		messageMap.put("IdentityChallenge", IdentityChallenge.class);
-		messageMap.put("IdentityRequest", IdentityRequest.class);
-		messageMap.put("IdentitySession", IdentitySession.class);
-		messageMap.put("NetworkData", NetworkData.class);
-		messageMap.put("ChunkData", ChunkData.class);
-
-		messageMap.put("SelfTrap", SelfTrap.class);
-
-		String analyticsServer = ModConfig.getInstance().get("analyticsServer").getAsString();
-
-		try {
-			client = new ConnectorClient(new URI(analyticsServer));
-			client.connectBlocking();
-		} catch (Exception ignored) {
-		}
-
 		ClientTickEvent.CLIENT_POST.register(minecraftClient -> tick());
-		ClientLifecycleEvent.CLIENT_STOPPING.register(minecraftClient -> client.close());
+		ClientLifecycleEvent.CLIENT_STOPPING.register(minecraftClient -> {
+			if (client != null && client.isOpen()) client.close();
+		});
 	}
 
-	private static Instant lastConnect = Instant.now();
 	private void tick() {
 		if (client != null && client.isOpen()) {
-			lastConnect = Instant.now();
+			try {
+				BaseOutboundMessage outboundMessage = outboundQueue.poll();
+				if (outboundMessage != null) {
+					if (!List.of(IdentityChallenge.class, IdentityRequest.class).contains(outboundMessage.getClass())) {
+						if (ConnectorClient.token == null) {
+							outboundQueue.add(outboundMessage); // Back of the line bucko
+						} else {
+							byte[] iv = new byte[16];
+							new SecureRandom().nextBytes(iv);
+							IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+							SecretKeySpec secretKeySpec = new SecretKeySpec(ConnectorClient.token.getBytes(), "AES");
 
-			if (outboundQueue.size() > 1) {
-				List<BaseMessage> messageList = new ArrayList<>();
-				for (int i = 0; i < outboundQueue.size(); i++) {
-					BaseMessage message = outboundQueue.peek();
-					if (message.authRequired && !message.id.equals("BulkMessage")) {
-						messageList.add(message);
-						outboundQueue.remove();
+							try {
+								Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+								cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+								byte[] encrypted = cipher.doFinal(outboundMessage.ser());
+
+								byte[] msg = new byte[encrypted.length + 16];
+								System.arraycopy(iv, 0, msg, 0, 16);
+								System.arraycopy(encrypted, 0, msg, 16, encrypted.length);
+								client.send(msg);
+							} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
+											 InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
+								if (Platform.isDevelopmentEnvironment()) e.printStackTrace();
+							}
+						}
+					} else {
+						client.send(outboundMessage.ser());
 					}
 				}
-
-				if (messageList.size() > 1) {
-					outboundQueue.add(new BulkMessage(messageList));
-				} else if (!messageList.isEmpty()) {
-					outboundQueue.add(messageList.get(0));
-				}
+			} catch (Exception e) {
+				if (Platform.isDevelopmentEnvironment()) e.printStackTrace();
 			}
+		}
+	}
 
-			BaseMessage outboundMessage = outboundQueue.poll();
-			if (outboundMessage != null) {
-				if (sessionId == null && outboundMessage.authRequired) {
-					outboundQueue.add(outboundMessage); // Back of the line bucko
-				} else {
-					outboundMessage.session = sessionId;
-					client.send(outboundMessage.jsonify());
-				}
-			}
-		} else if(lastConnect.plusSeconds(15).isBefore(Instant.now())) {
-			lastConnect = Instant.now();
+	public static void setup() {
+		try {
+			String analyticsServer = ModConfig.getInstance().get("analyticsServer").getAsString();
+			instance = new ModConnector();
 			outboundQueue.clear();
 
-			try {
-				String analyticsServer = ModConfig.getInstance().get("analyticsServer").getAsString();
-				client = new ConnectorClient(new URI(analyticsServer));
-				client.connectBlocking();
-			} catch(URISyntaxException | InterruptedException ignored) {}
+			if (client != null && client.isOpen()) client.close();
+			client = new ConnectorClient(new URI(analyticsServer));
+			client.connectBlocking();
+		} catch (InterruptedException | URISyntaxException e) {
+			if (Platform.isDevelopmentEnvironment()) e.printStackTrace();
 		}
 	}
 
@@ -102,22 +104,16 @@ public class ModConnector {
 		return instance;
 	}
 
-	public static void setup(String username, String uuid) {
-		sessionId = null;
-		ModConnector.instance = null;
-		ModConnector.getInstance().send(new IdentityRequest(username, uuid));
-		ModConnector.getInstance().send(new NetworkData());
-	}
-
-	public void send(BaseMessage message) {
+	public void send(BaseOutboundMessage message) {
 		outboundQueue.offer(message);
 	}
 
-	public void setSession(String session) {
-		sessionId = session;
+	public void setToken(String token) {
+		ConnectorClient.token = token;
 	}
 
 	private static class ConnectorClient extends WebSocketClient {
+		public static String token;
 
 		public ConnectorClient(URI serverUri, Draft draft) {
 			super(serverUri, draft);
@@ -138,36 +134,34 @@ public class ModConnector {
 
 		@Override
 		public void onOpen(ServerHandshake handshakedata) {
+			token = null;
+			ModConnector.getInstance().send(new IdentityRequest(MinecraftClient.getInstance()
+				.getSession()
+				.getUuid()
+				.replaceAll("-", "")));
+			ModConnector.getInstance().send(new NetworkData());
+		}
+
+		@Override
+		public void onMessage(ByteBuffer bytes) {
+			try {
+				ObjectMapper objectMapper = new MessagePackMapper();
+				List<Object> msg = objectMapper.readValue(bytes.array(), new TypeReference<>() {
+				});
+
+				String type = (String) msg.get(0);
+				Object payload = msg.get(1);
+
+				((BaseInboundMessage) objectMapper.convertValue(payload,
+					Class.forName("com.connectorlib.messages.inbound." + type))).respond();
+			} catch (IOException | ClassNotFoundException e) {
+				if (Platform.isDevelopmentEnvironment()) e.printStackTrace();
+			}
 		}
 
 		@Override
 		public void onMessage(String message) {
-			JsonObject json = JsonParser.parseString(message).getAsJsonObject();
-			JsonElement _id = json.remove("id");
-
-			if (_id == null) return;
-			String id = _id.getAsString();
-
-			if (messageMap.containsKey(id)) {
-				Class<?> clazz = messageMap.get(id);
-				Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
-				Parameter[] parameters = constructor.getParameters();
-				Object[] args = new Object[parameters.length];
-
-				for (int i = 0; i < parameters.length; i++) {
-					JsonElement jsonElement = json.asMap().values().stream().toList().get(i);
-					if (jsonElement != null) {
-						args[i] = new GsonBuilder().create().fromJson(jsonElement, parameters[i].getType());
-					}
-				}
-
-				try {
-					BaseMessage instance = (BaseMessage) constructor.newInstance(args);
-					outboundQueue.add(instance);
-				} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-					if (Platform.isDevelopmentEnvironment()) e.printStackTrace();
-				}
-			}
+			// we only deal in ByteBuffers round here
 		}
 	}
 }
