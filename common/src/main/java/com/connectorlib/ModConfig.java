@@ -34,7 +34,7 @@ public class ModConfig {
 
 	private JsonObject createDefaultConfig() {
 		JsonObject defaultConfig = new JsonObject();
-		defaultConfig.addProperty("analyticsServer", "ws://localhost:3000");
+		defaultConfig.addProperty("analyticsServer", "ws://localhost:3740");
 		defaultConfig.addProperty("analyticsPeriod", 6000);
 		defaultConfig.addProperty("analyticsEnabled", false);
 		return defaultConfig;
