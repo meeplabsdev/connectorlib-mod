@@ -3,7 +3,7 @@ package com.connectorlib.forge;
 import com.connectorlib.ConnectorLibMod;
 import com.connectorlib.ModConnector;
 import com.connectorlib.ModUpdater;
-import com.connectorlib.messages.outbound.ChunkData;
+import com.connectorlib.messages.outbound.old.ChunkData;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
@@ -25,26 +25,26 @@ public final class ConnectorLibModForge {
 		new ModUpdater(new PlatformedUpdater()).update();
 	}
 
-	@SubscribeEvent
-	public static void onChunkLoad(ChunkEvent.Load event) {
-		if (event.getLevel().isClient()) {
-			String ip = "unknown";
-			MinecraftClient minecraftClient = MinecraftClient.getInstance();
-			if (minecraftClient.getCurrentServerEntry() != null) {
-				ip = minecraftClient.getCurrentServerEntry().address;
-			}
-
-			ClientWorld world = minecraftClient.world;
-			Chunk chunk = event.getChunk();
-			assert world != null;
-
-			ChunkPos chunkPos = chunk.getPos();
-			ModConnector.getInstance().send(new ChunkData(
-				ip,
-				world.getDimensionKey().getValue().toTranslationKey(),
-				chunkPos.x,
-				chunkPos.z
-			));
-		}
-	}
+//	@SubscribeEvent
+//	public static void onChunkLoad(ChunkEvent.Load event) {
+//		if (event.getLevel().isClient()) {
+//			String ip = "unknown";
+//			MinecraftClient minecraftClient = MinecraftClient.getInstance();
+//			if (minecraftClient.getCurrentServerEntry() != null) {
+//				ip = minecraftClient.getCurrentServerEntry().address;
+//			}
+//
+//			ClientWorld world = minecraftClient.world;
+//			Chunk chunk = event.getChunk();
+//			assert world != null;
+//
+//			ChunkPos chunkPos = chunk.getPos();
+//			ModConnector.getInstance().send(new ChunkData(
+//				ip,
+//				world.getDimensionKey().getValue().toTranslationKey(),
+//				chunkPos.x,
+//				chunkPos.z
+//			));
+//		}
+//	}
 }
