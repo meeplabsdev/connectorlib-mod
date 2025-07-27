@@ -1,13 +1,11 @@
 package com.connectorlib.messages.outbound;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 
-public class PlayerQuit extends BaseMessage {
-	String ip;
-	String uuid;
+public class PlayerQuit extends BaseOutboundMessage {
+	public String ip;
 
-	public PlayerQuit(String ip, String uuid) {
+	public PlayerQuit(String ip) {
 		this.ip = ip;
-		this.uuid = uuid;
 	}
 }

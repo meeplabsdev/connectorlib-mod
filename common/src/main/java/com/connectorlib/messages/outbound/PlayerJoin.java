@@ -1,13 +1,11 @@
 package com.connectorlib.messages.outbound;
 
-import com.connectorlib.BaseMessage;
+import com.connectorlib.BaseOutboundMessage;
 
-public class PlayerJoin extends BaseMessage {
-	String ip;
-	String uuid;
+public class PlayerJoin extends BaseOutboundMessage {
+	public String ip;
 
-	public PlayerJoin(String ip, String uuid) {
+	public PlayerJoin(String ip) {
 		this.ip = ip;
-		this.uuid = uuid;
 	}
 }
