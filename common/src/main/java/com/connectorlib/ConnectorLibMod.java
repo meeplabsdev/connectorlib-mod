@@ -1,7 +1,10 @@
 package com.connectorlib;
 
+import com.connectorlib.messages.outbound.ChatData;
 import com.connectorlib.messages.outbound.PlayerJoin;
 import com.connectorlib.messages.outbound.PlayerQuit;
+import dev.architectury.event.CompoundEventResult;
+import dev.architectury.event.events.client.ClientChatEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.client.ClientPlayerEvent;
 import net.minecraft.client.MinecraftClient;
@@ -16,8 +19,14 @@ public final class ConnectorLibMod {
 		final int analyticsPeriod = ModConfig.getInstance().get("analyticsPeriod").getAsInt() / 50;
 
 		ClientLifecycleEvent.CLIENT_SETUP.register(minecraftClient -> ModConnector.setup());
+
 		ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> ModConnector.getInstance().send(new PlayerJoin(ip())));
 		ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(player -> ModConnector.getInstance().send(new PlayerQuit(ip())));
+
+		ClientChatEvent.RECEIVED.register((parameters, message) -> {
+			ModConnector.getInstance().send(new ChatData(parameters, message));
+			return CompoundEventResult.pass();
+		});
 
 //		AtomicInteger tickCounter = new AtomicInteger();
 //		ClientTickEvent.CLIENT_POST.register(minecraftClient -> {
@@ -80,44 +89,6 @@ public final class ConnectorLibMod {
 //
 //				tickCounter.set(0);
 //			}
-//		});
-//
-//		ClientChatEvent.RECEIVED.register((parameters, message) -> {
-//			String senderName = parameters.name().getString();
-//			AtomicReference<UUID> senderUuid = new AtomicReference<>(new UUID(0, 0));
-//
-//			MinecraftClient client = MinecraftClient.getInstance();
-//			assert client.player != null;
-//			assert client.world != null;
-//
-//			client.world.getPlayers().forEach(player -> {
-//				if (player.getName().getString().equals(senderName)) {
-//					senderUuid.set(player.getUuid());
-//				}
-//			});
-//
-//			ModConnector.getInstance().send(new ChatData(
-//				getIp(),
-//				message.getString(),
-//				senderName,
-//				senderUuid.get().toString(),
-//				client.player.getName().getString(),
-//				client.player.getUuid().toString()
-//			));
-//			return CompoundEventResult.pass();
-//		});
-//
-//		ClientSystemMessageEvent.RECEIVED.register(message -> {
-//			MinecraftClient client = MinecraftClient.getInstance();
-//			assert client.player != null;
-//
-//			ModConnector.getInstance().send(new SystemChatData(
-//				getIp(),
-//				message.getString(),
-//				client.player.getName().getString(),
-//				client.player.getUuid().toString()
-//			));
-//			return CompoundEventResult.pass();
 //		});
 //
 //		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
