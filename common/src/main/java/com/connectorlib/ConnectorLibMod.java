@@ -1,13 +1,18 @@
 package com.connectorlib;
 
-import com.connectorlib.messages.outbound.ChatData;
+import com.connectorlib.messages.outbound.ClientChat;
+import com.connectorlib.messages.outbound.ClientPosition;
 import com.connectorlib.messages.outbound.PlayerJoin;
 import com.connectorlib.messages.outbound.PlayerQuit;
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.ClientChatEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.client.ClientPlayerEvent;
+import dev.architectury.event.events.client.ClientTickEvent;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ConnectorLibMod {
 	public static final String MOD_ID = "connectorlib";
@@ -24,23 +29,24 @@ public final class ConnectorLibMod {
 		ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(player -> ModConnector.getInstance().send(new PlayerQuit(ip())));
 
 		ClientChatEvent.RECEIVED.register((parameters, message) -> {
-			ModConnector.getInstance().send(new ChatData(parameters, message));
+			ModConnector.getInstance().send(new ClientChat(parameters, message));
 			return CompoundEventResult.pass();
 		});
 
-//		AtomicInteger tickCounter = new AtomicInteger();
-//		ClientTickEvent.CLIENT_POST.register(minecraftClient -> {
-//			if (tickCounter.incrementAndGet() > analyticsPeriod) {
-//				if (minecraftClient.player != null) {
-//					ClientPlayerEntity player = minecraftClient.player;
-//					Vec3d pos = player.getPos();
-//
-//					ModConnector.getInstance().send(new PositionData(getIp(),
-//						player.getWorld().getDimensionKey().getValue().toString(),
-//						(int) pos.x,
-//						(int) pos.y,
-//						(int) pos.z));
-//
+//		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
+//			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getUuidAsString()));
+//		});
+
+		AtomicInteger tickCounter = new AtomicInteger();
+		ClientTickEvent.CLIENT_POST.register(minecraftClient -> {
+			if (tickCounter.incrementAndGet() > analyticsPeriod) {
+				tickCounter.set(0);
+
+				if (minecraftClient.player != null) {
+					ClientPlayerEntity player = minecraftClient.player;
+
+					ModConnector.getInstance().send(new ClientPosition(player));
+
 //					ModConnector.getInstance().send(new PlayerHealth((int) player.getHealth()));
 //
 //					HungerManager hm = player.getHungerManager();
@@ -82,18 +88,10 @@ public final class ConnectorLibMod {
 //						armor.get(1),
 //						armor.get(0)));
 //
-//					ModConnector.getInstance().send(new PlayerMovement(player));
-//
 //					ModConnector.getInstance().send(new PlayerEffects(player.getStatusEffects().stream().toList()));
-//				}
-//
-//				tickCounter.set(0);
-//			}
-//		});
-//
-//		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
-//			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getUuidAsString()));
-//		});
+				}
+			}
+		});
 	}
 
 	private static String ip() {
