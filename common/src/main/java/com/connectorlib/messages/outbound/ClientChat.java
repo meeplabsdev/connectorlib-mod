@@ -9,13 +9,13 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class ChatData extends BaseOutboundMessage {
+public class ClientChat extends BaseOutboundMessage {
 	public String message;
 	public String type;
 	public String from;
 	public String to;
 
-	public ChatData(MessageType.Parameters parameters, Text message) {
+	public ClientChat(MessageType.Parameters parameters, Text message) {
 		MinecraftClient minecraftClient = MinecraftClient.getInstance();
 		ClientPlayNetworkHandler networkHandler = minecraftClient.getNetworkHandler();
 		assert networkHandler != null;
