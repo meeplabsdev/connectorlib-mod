@@ -36,8 +36,6 @@ subprojects {
         mappings "net.fabricmc:yarn:$rootProject.yarn_mappings:v2"
         implementation 'org.msgpack:msgpack-core:0.9.10'
         implementation 'org.msgpack:jackson-dataformat-msgpack:0.9.10'
-        include 'org.msgpack:msgpack-core:0.9.10'
-        include 'org.msgpack:jackson-dataformat-msgpack:0.9.10'
 
         modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.1")
     }
