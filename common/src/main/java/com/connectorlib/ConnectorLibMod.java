@@ -46,50 +46,8 @@ public final class ConnectorLibMod {
 					ClientPlayerEntity player = minecraftClient.player;
 
 					ModConnector.getInstance().send(new ClientPosition(player));
-
-//					ModConnector.getInstance().send(new PlayerHealth((int) player.getHealth()));
-//
-//					HungerManager hm = player.getHungerManager();
-//					ModConnector.getInstance().send(new PlayerHunger(
-//						hm.getFoodLevel(),
-//						(int) hm.getSaturationLevel(),
-//						(int) hm.getExhaustion()));
-//
-//					ModConnector.getInstance().send(new PlayerBreath(player.getAir()));
-//
-//					ModConnector.getInstance().send(new PlayerExperience(player.experienceLevel, player.experienceProgress));
-//
-//					ModConnector.getInstance().send(new PlayerGamemode(player));
-//
-//					ClientPlayNetworkHandler nh = player.networkHandler;
-//					if (nh != null && nh.getPlayerList() != null) {
-//						PlayerListEntry entry = nh.getPlayerListEntry(player.getUuid());
-//						if (entry != null) {
-//							ModConnector.getInstance().send(new PlayerPing(entry.getLatency()));
-//						}
-//					}
-//
-//					ModConnector.getInstance().send(new PlayerFPS(minecraftClient.getCurrentFps()));
-//
-//					ItemStack[] itemStacks = new ItemStack[10];
-//					PlayerInventory inventory = player.getInventory();
-//					for (int i = 0; i < 9; i++) itemStacks[i] = inventory.getStack(i);
-//					itemStacks[9] = inventory.offHand.get(0);
-//
-//					ModConnector.getInstance().send(new PlayerHotbar(
-//						inventory.selectedSlot,
-//						itemStacks
-//						));
-//
-//					DefaultedList<ItemStack> armor = inventory.armor;
-//					ModConnector.getInstance().send(new PlayerArmor(
-//						armor.get(3),
-//						armor.get(2),
-//						armor.get(1),
-//						armor.get(0)));
-//
-//					ModConnector.getInstance().send(new PlayerEffects(player.getStatusEffects().stream().toList()));
 					ModConnector.getInstance().send(new ClientAttributes(minecraftClient));
+					ModConnector.getInstance().send(new ClientInventory(player.getInventory()));
 				}
 			}
 		});
