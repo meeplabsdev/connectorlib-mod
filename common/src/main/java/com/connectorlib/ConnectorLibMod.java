@@ -89,6 +89,7 @@ public final class ConnectorLibMod {
 //						armor.get(0)));
 //
 //					ModConnector.getInstance().send(new PlayerEffects(player.getStatusEffects().stream().toList()));
+					ModConnector.getInstance().send(new ClientAttributes(minecraftClient));
 				}
 			}
 		});
