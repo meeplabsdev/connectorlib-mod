@@ -1,9 +1,6 @@
 package com.connectorlib;
 
-import com.connectorlib.messages.outbound.ClientChat;
-import com.connectorlib.messages.outbound.ClientPosition;
-import com.connectorlib.messages.outbound.PlayerJoin;
-import com.connectorlib.messages.outbound.PlayerQuit;
+import com.connectorlib.messages.outbound.*;
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.ClientChatEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
@@ -27,15 +24,13 @@ public final class ConnectorLibMod {
 
 		ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> ModConnector.getInstance().send(new PlayerJoin(ip())));
 		ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(player -> ModConnector.getInstance().send(new PlayerQuit(ip())));
+		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> ModConnector.getInstance()
+			.send(new PlayerRespawn(oldPlayer.getPos())));
 
 		ClientChatEvent.RECEIVED.register((parameters, message) -> {
 			ModConnector.getInstance().send(new ClientChat(parameters, message));
 			return CompoundEventResult.pass();
 		});
-
-//		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> {
-//			ModConnector.getInstance().send(new PlayerRespawn(getIp(), newPlayer.getUuidAsString()));
-//		});
 
 		AtomicInteger tickCounter = new AtomicInteger();
 		ClientTickEvent.CLIENT_POST.register(minecraftClient -> {
