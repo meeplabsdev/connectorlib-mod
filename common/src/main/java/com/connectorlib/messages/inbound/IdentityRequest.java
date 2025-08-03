@@ -1,6 +1,7 @@
 package com.connectorlib.messages.inbound;
 
 import com.connectorlib.BaseInboundMessage;
+import com.connectorlib.ModConfig;
 import com.connectorlib.messages.outbound.IdentityChallenge;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +28,7 @@ public class IdentityRequest extends BaseInboundMessage {
 	public IdentityRequest(@JsonProperty("nonce") String nonce, @JsonProperty("iv") String iv) {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		String plaintext = nonce + mc.getSession().getUuid().replaceAll("-", "");
-		String authenticity = HexFormat.of().formatHex(encrypt(plaintext, "This is the key!", iv));
+		String authenticity = HexFormat.of().formatHex(encrypt(plaintext, ModConfig.getInstance().get("encryptionKey").getAsString(), iv));
 
 		String chars = "abcdefghijklmnopqrstuvwxyz0123456789";
 		Random random = new Random();
