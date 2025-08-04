@@ -1,7 +1,6 @@
 package com.connectorlib.fabric;
 
 import com.connectorlib.ConnectorLibMod;
-import com.connectorlib.ModUpdater;
 import net.fabricmc.api.ModInitializer;
 
 public final class ConnectorLibModFabric implements ModInitializer {
@@ -13,6 +12,5 @@ public final class ConnectorLibModFabric implements ModInitializer {
 
 		// Run our common setup.
 		ConnectorLibMod.init();
-		new ModUpdater(new PlatformedUpdater()).update();
 	}
 }

@@ -2,7 +2,6 @@ package com.connectorlib.forge;
 
 import com.connectorlib.ConnectorLibMod;
 import com.connectorlib.ModConnector;
-import com.connectorlib.ModUpdater;
 import com.connectorlib.messages.outbound.ClientChunk;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraft.client.world.ClientWorld;
@@ -20,7 +19,6 @@ public final class ConnectorLibModForge {
 
 		// Run our common setup.
 		ConnectorLibMod.init();
-		new ModUpdater(new PlatformedUpdater()).update();
 	}
 
 	@SubscribeEvent

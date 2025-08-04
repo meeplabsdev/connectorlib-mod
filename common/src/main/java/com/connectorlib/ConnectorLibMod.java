@@ -1,6 +1,7 @@
 package com.connectorlib;
 
 import com.connectorlib.messages.outbound.*;
+import com.croaklib.ModUpdater;
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.events.client.ClientChatEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
@@ -13,10 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ConnectorLibMod {
 	public static final String MOD_ID = "connectorlib";
-	public static final String ghUser = "meeplabsdev";
-	public static final String repoName = "connectorlib-mod";
 
 	public static void init() {
+		ModUpdater.addMod(MOD_ID);
+
 		if (!ModConfig.getInstance().get("analyticsEnabled").getAsBoolean()) return;
 		final int analyticsPeriod = ModConfig.getInstance().get("analyticsPeriod").getAsInt() / 50;
 
